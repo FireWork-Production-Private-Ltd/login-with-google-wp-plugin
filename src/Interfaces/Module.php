@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Interface Module.
  *
@@ -16,19 +17,19 @@ namespace FireWork\GoogleLogin\Interfaces;
  *
  * @package WpGuruDev\OrderExport
  */
-interface Module {
+interface Module
+{
+    /**
+     * Initialization of module.
+     *
+     * @return void
+     */
+    public function init(): void;
 
-	/**
-	 * Initialization of module.
-	 *
-	 * @return void
-	 */
-	public function init(): void;
-
-	/**
-	 * Return module name.
-	 *
-	 * @return string
-	 */
-	public function name(): string;
+    /**
+     * Return module name.
+     *
+     * @return string
+     */
+    public function name(): string;
 }

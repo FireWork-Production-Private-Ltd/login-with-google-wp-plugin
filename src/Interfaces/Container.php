@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Container Interface.
  *
@@ -15,11 +16,12 @@ namespace FireWork\GoogleLogin\Interfaces;
  *
  * @package WpGuruDev\OrderExport\Interfaces
  */
-interface Container {
-	/**
-	 * Define services in container.
-	 *
-	 * @return void
-	 */
-	public function define_services(): void;
+interface Container
+{
+    /**
+     * Define services in container.
+     *
+     * @return void
+     */
+    public function define_services(): void;
 }

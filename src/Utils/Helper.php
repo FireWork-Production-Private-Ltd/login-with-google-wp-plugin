@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Helper class for all helper function.
  *
@@ -15,109 +16,109 @@ namespace FireWork\GoogleLogin\Utils;
 /**
  * Class Helper
  */
-class Helper {
+class Helper
+{
+    /**
+     * To render or return output of template.
+     *
+     * @param string $template_path Template path.
+     * @param array  $variables     array of variables that needed on template.
+     * @param bool   $echo          Whether need to echo to return HTML markup.
+     *
+     * @return string
+     */
+    public static function render_template($template_path, $variables = [], $echo = true)
+    {
 
-	/**
-	 * To render or return output of template.
-	 *
-	 * @param string $template_path Template path.
-	 * @param array  $variables     array of variables that needed on template.
-	 * @param bool   $echo          Whether need to echo to return HTML markup.
-	 *
-	 * @return string
-	 */
-	public static function render_template( $template_path, $variables = [], $echo = true ) {
+        $validate_file = validate_file($template_path);
+        // Function validate_file returns 2 for Windows drive path, so we check that as well.
+        if (empty($template_path) || ! file_exists($template_path) || ( 0 !== $validate_file && 2 !== $validate_file )) {
+            return '';
+        }
 
-		$validate_file = validate_file( $template_path );
-		// Function validate_file returns 2 for Windows drive path, so we check that as well.
-		if ( empty( $template_path ) || ! file_exists( $template_path ) || ( 0 !== $validate_file && 2 !== $validate_file ) ) {
-			return '';
-		}
-
-		if ( ! empty( $variables ) ) {
-			// This will needed for provide variables to the template.
-			// Will skips those variables, those already defined.
+        if (! empty($variables)) {
+            // This will needed for provide variables to the template.
+            // Will skips those variables, those already defined.
 			extract( $variables, EXTR_SKIP ); // phpcs:ignore
-		}
+        }
 
-		if ( true === $echo ) {
-
-			// Load template and output the data.
+        if (true === $echo) {
+            // Load template and output the data.
 			require $template_path; // phpcs:ignore
 
-			return ''; // Job done, bail out.
-		}
+            return ''; // Job done, bail out.
+        }
 
-		ob_start();
+        ob_start();
 
-		// Load template output in buffer.
+        // Load template output in buffer.
 		require $template_path; // phpcs:ignore
 
-		return ob_get_clean();
+        return ob_get_clean();
+    }
 
-	}
+    /**
+     * This method is an improved version of PHP's filter_input() and
+     * works well on PHP Cli as well which PHP default method does not.
+     *
+     * Reference: https://bugs.php.net/bug.php?id=49184
+     *
+     * @param int    $type          One of INPUT_GET, INPUT_POST, INPUT_COOKIE, INPUT_SERVER, or INPUT_ENV.
+     * @param string $variable_name Name of a variable to get.
+     * @param int    $filter        The ID of the filter to apply.
+     * @param mixed  $options       filter to apply.
+     *
+     * @return mixed Value of the requested variable on success, FALSE if the filter fails, or NULL if the
+     *  variable_name variable is not set.
+     */
+    public static function filter_input($type, $variable_name, $filter = FILTER_DEFAULT, $options = null)
+    {
 
-	/**
-	 * This method is an improved version of PHP's filter_input() and
-	 * works well on PHP Cli as well which PHP default method does not.
-	 *
-	 * Reference: https://bugs.php.net/bug.php?id=49184
-	 *
-	 * @param int    $type          One of INPUT_GET, INPUT_POST, INPUT_COOKIE, INPUT_SERVER, or INPUT_ENV.
-	 * @param string $variable_name Name of a variable to get.
-	 * @param int    $filter        The ID of the filter to apply.
-	 * @param mixed  $options       filter to apply.
-	 *
-	 * @return mixed Value of the requested variable on success, FALSE if the filter fails, or NULL if the
-	 *  variable_name variable is not set.
-	 */
-	public static function filter_input( $type, $variable_name, $filter = FILTER_DEFAULT, $options = null ) {
+        if (php_sapi_name() !== 'cli') {
 
-		if ( php_sapi_name() !== 'cli' ) {
+            /**
+             * We can not have code coverage since.
+             * Since this will only execute when sapi is "fpm-fcgi".
+             * While Unit test case run on "cli"
+             */
+            // @codeCoverageIgnoreStart
 
-			/**
-			 * We can not have code coverage since.
-			 * Since this will only execute when sapi is "fpm-fcgi".
-			 * While Unit test case run on "cli"
-			 */
-			// @codeCoverageIgnoreStart
+            /**
+             * Code is not running on PHP Cli and we are in clear.
+             * Use the PHP method and bail out.
+             */
+            switch ($filter) {
+                case FILTER_SANITIZE_FULL_SPECIAL_CHARS:
+                    $sanitized_variable = filter_input($type, $variable_name, $filter);
+                    break;
+                default:
+                    $sanitized_variable = filter_input($type, $variable_name, $filter, $options);
+                    break;
+            }
 
-			/**
-			 * Code is not running on PHP Cli and we are in clear.
-			 * Use the PHP method and bail out.
-			 */
-			switch ( $filter ) {
-				case FILTER_SANITIZE_FULL_SPECIAL_CHARS:
-					$sanitized_variable = filter_input( $type, $variable_name, $filter );
-					break;
-				default:
-					$sanitized_variable = filter_input( $type, $variable_name, $filter, $options );
-					break;
-			}
+            return $sanitized_variable;
+            // @codeCoverageIgnoreEnd
+        }
 
-			return $sanitized_variable;
-			// @codeCoverageIgnoreEnd
-		}
+        /**
+         * Code is running on PHP Cli and INPUT_SERVER returns NULL
+         * even for set vars when run on Cli
+         * See: https://bugs.php.net/bug.php?id=49184
+         *
+         * This is a workaround for that bug till its resolved in PHP binary
+         * which doesn't look to be anytime soon. This is a friggin' 10 year old bug.
+         */
 
-		/**
-		 * Code is running on PHP Cli and INPUT_SERVER returns NULL
-		 * even for set vars when run on Cli
-		 * See: https://bugs.php.net/bug.php?id=49184
-		 *
-		 * This is a workaround for that bug till its resolved in PHP binary
-		 * which doesn't look to be anytime soon. This is a friggin' 10 year old bug.
-		 */
+        $input = '';
 
-		$input = '';
+        $allowed_html_tags = wp_kses_allowed_html('post');
 
-		$allowed_html_tags = wp_kses_allowed_html( 'post' );
-
-		/**
-		 * Marking the switch() block below to be ignored by PHPCS
-		 * because PHPCS squawks on using superglobals like $_POST or $_GET
-		 * directly but it can't be helped in this case as this code
-		 * is running on Cli.
-		 */
+        /**
+         * Marking the switch() block below to be ignored by PHPCS
+         * because PHPCS squawks on using superglobals like $_POST or $_GET
+         * directly but it can't be helped in this case as this code
+         * is running on Cli.
+         */
 
 		// @codingStandardsIgnoreStart
 
@@ -171,26 +172,26 @@ class Helper {
 
 		// @codingStandardsIgnoreEnd
 
-		return filter_var( $input, $filter );
+        return filter_var($input, $filter);
+    }
 
-	}
+    /**
+     * Checks if username exists, if it does, creates a
+     * unique username by appending digits.
+     *
+     * @param string $username Username.
+     *
+     * @return string
+     */
+    public static function unique_username(string $username): string
+    {
+        $uname = $username;
+        $count = 1;
 
-	/**
-	 * Checks if username exists, if it does, creates a
-	 * unique username by appending digits.
-	 *
-	 * @param string $username Username.
-	 *
-	 * @return string
-	 */
-	public static function unique_username( string $username ): string {
-		$uname = $username;
-		$count = 1;
+        while (username_exists($uname)) {
+            $uname = $uname . '' . $count;
+        }
 
-		while ( username_exists( $uname ) ) {
-			$uname = $uname . '' . $count;
-		}
-
-		return $uname;
-	}
+        return $uname;
+    }
 }

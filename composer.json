@@ -1,27 +1,11 @@
 {
-    "name": "FireWork/login-with-google",
+    "name": "firework/login-with-google",
     "description": "WordPress plugin to let users login with google.",
     "license": "GPL 2.0",
     "authors": [
         {
-            "name": "FireWork",
-            "email": "contact@FireWork.com",
-            "homepage": "https://FireWork.com/",
-            "role": "Developer"
-        },
-        {
-            "name": "Utkarsh Patel",
-            "email": "itismeutkarsh@gmail.com"
-        },
-        {
-            "name": "Paul Clark",
-            "role": "Developer"
-        },
-        {
-            "name": "Ankit Gade",
-            "email": "ankit.gade@FireWork.com",
-            "homepage": "https://iamank.it/",
-            "role": "Developer"
+            "name": "Utsav Patel",
+            "email": "75293077+up1512001@users.noreply.github.com"
         }
     ],
     "minimum-stability": "dev",
@@ -31,7 +15,8 @@
         "pimple/pimple": "3.5.*"
     },
     "require-dev": {
-        "squizlabs/php_codesniffer": "^3.7.1",
+        "squizlabs/php_codesniffer": "^3.9",
+        "phpcsstandards/phpcsutils": "^1.0",
         "dealerdirect/phpcodesniffer-composer-installer": "^0.7.2",
         "wp-coding-standards/wpcs": "^2.3",
         "sirbrillig/phpcs-variable-analysis": "^v2.11.3",
@@ -62,6 +47,8 @@
         "qa": [
             "@cs",
             "@tests"
-        ]
+        ],
+        "phpcs": "phpcs --standard=PSR12",
+        "phpcbf": "phpcbf --standard=PSR12"
     }
 }

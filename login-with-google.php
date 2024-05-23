@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Plugin Name: Login with Google WP Plugin
  * Description: Allow users to login/register via Google.
@@ -22,41 +23,41 @@ namespace FireWork\GoogleLogin;
 use Pimple\Container as PimpleContainer;
 
 // Prevent direct access.
-defined( 'ABSPATH' ) || exit;
+defined('ABSPATH') || exit;
 
 $hooks = [
-	'admin_notices',
-	'network_admin_notices',
+    'admin_notices',
+    'network_admin_notices',
 ];
 
 /**
  * PHP 7.4+ is required in order to use the plugin.
  */
-if ( version_compare( PHP_VERSION, '7.4', '<' ) ) {
-	foreach ( $hooks as $hook ) {
-		add_action(
-			$hook,
-			function () {
-				$message = __(
-					'Login with google Plugin requires PHP version 7.4 or higher. <br />Please ask your server administrator to update your environment to latest PHP version',
-					'login-with-google'
-				);
+if (version_compare(PHP_VERSION, '7.4', '<')) {
+    foreach ($hooks as $hook) {
+        add_action(
+            $hook,
+            function () {
+                $message = __(
+                    'Login with google Plugin requires PHP version 7.4 or higher. <br />Please ask your server administrator to update your environment to latest PHP version',
+                    'login-with-google'
+                );
 
-				printf(
-					'<div class="notice notice-error"><span class="notice-title">%1$s</span><p>%2$s</p></div>',
-					esc_html__(
-						'The plugin Login with google has been deactivated',
-						'login-with-google'
-					),
-					wp_kses( $message, [ 'br' => true ] )
-				);
+                printf(
+                    '<div class="notice notice-error"><span class="notice-title">%1$s</span><p>%2$s</p></div>',
+                    esc_html__(
+                        'The plugin Login with google has been deactivated',
+                        'login-with-google'
+                    ),
+                    wp_kses($message, [ 'br' => true ])
+                );
 
-				deactivate_plugins( plugin_basename( __FILE__ ) );
-			}
-		);
-	}
+                deactivate_plugins(plugin_basename(__FILE__));
+            }
+        );
+    }
 
-	return;
+    return;
 }
 
 /**
@@ -64,44 +65,46 @@ if ( version_compare( PHP_VERSION, '7.4', '<' ) ) {
  *
  * @return bool
  */
-function autoload(): bool {
-	static $done;
-	if ( is_bool( $done ) ) {
-		return $done;
-	}
+function autoload(): bool
+{
+    static $done;
+    if (is_bool($done)) {
+        return $done;
+    }
 
-	if ( is_readable( __DIR__ . '/vendor/autoload.php' ) ) {
-		require_once __DIR__ . '/vendor/autoload.php';
-		$done = true;
+    if (is_readable(__DIR__ . '/vendor/autoload.php')) {
+        require_once __DIR__ . '/vendor/autoload.php';
+        $done = true;
 
-		return true;
-	}
-	$done = false;
+        return true;
+    }
+    $done = false;
 
-	return false;
+    return false;
 }
 
 /**
  * Do not do anything if composer install
  * is not run.
  */
-if ( ! autoload() ) {
-	return;
+if (! autoload()) {
+    return;
 }
 
 /**
  * Return the container instance.
  */
-function container(): Container {
-	static $container;
+function container(): Container
+{
+    static $container;
 
-	if ( null !== $container ) {
-		return $container;
-	}
+    if (null !== $container) {
+        return $container;
+    }
 
-	$container = new Container( new PimpleContainer() );
+    $container = new Container(new PimpleContainer());
 
-	return $container;
+    return $container;
 }
 
 /**
@@ -109,15 +112,16 @@ function container(): Container {
  *
  * @return Plugin
  */
-function plugin(): Plugin {
-	static $plugin;
+function plugin(): Plugin
+{
+    static $plugin;
 
-	if ( null !== $plugin ) {
-		return $plugin;
-	}
+    if (null !== $plugin) {
+        return $plugin;
+    }
 
-	$plugin = new Plugin( container() );
-	return $plugin;
+    $plugin = new Plugin(container());
+    return $plugin;
 }
 
 /**
@@ -125,9 +129,9 @@ function plugin(): Plugin {
  * running the plugin.
  */
 add_action(
-	'plugins_loaded',
-	function() {
-		plugin()->run();
-	},
-	100
+    'plugins_loaded',
+    function () {
+        plugin()->run();
+    },
+    100
 );
