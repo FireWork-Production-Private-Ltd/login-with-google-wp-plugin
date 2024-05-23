@@ -1,8 +1,8 @@
 <?php
 /**
- * Plugin Name: Login with Google
+ * Plugin Name: Login with Google WP Plugin
  * Description: Allow users to login/register via Google.
- * Version: 1.3.2
+ * Version: 1.0.0
  * Author: FireWork
  * Author URI: https://FireWork.com
  * Text Domain: login-with-google
