@@ -99,8 +99,8 @@ class GoogleClient
         ];
 
         if (in_array($name, $methods, true) && empty($this->access_token)) {
-            throw new Exception(__('Access token must be set to make this API call', 'login-with-google'));
-            throw new Exception($args);
+            throw new esc_html(Exception(__('Access token must be set to make this API call', 'login-with-google')));
+            throw new esc_html(Exception($args));
         }
     }
 
