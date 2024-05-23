@@ -164,7 +164,7 @@ class Login implements ModuleInterface
                 return $user;
             }
 
-            throw new Exception(__('Could not authenticate the user, please try again.', 'login-with-google'));
+            throw new Exception(esc_html(__('Could not authenticate the user, please try again.', 'login-with-google')));
         } catch (Throwable $e) {
             return new WP_Error('google_login_failed', $e->getMessage());
         }

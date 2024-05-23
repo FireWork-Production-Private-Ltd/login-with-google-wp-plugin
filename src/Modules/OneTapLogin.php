@@ -176,7 +176,7 @@ class OneTapLogin implements Module
             $verified = $this->token_verifier->verify_token($token);
 
             if (! $verified) {
-                throw new Exception(__('Cannot verify the credentials', 'login-with-google'));
+                throw new Exception(esc_html(__('Cannot verify the credentials', 'login-with-google')));
             }
 
             /**
@@ -218,7 +218,7 @@ class OneTapLogin implements Module
         $user = $this->token_verifier->current_user();
 
         if (is_null($user)) {
-            throw new Exception(__('User not found to authenticate', 'login-with-google'));
+            throw new Exception(esc_html(__('User not found to authenticate', 'login-with-google')));
         }
 
         $wp_user = $this->authenticator->authenticate($user);

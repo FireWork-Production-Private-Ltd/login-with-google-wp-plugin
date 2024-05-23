@@ -66,7 +66,7 @@ class Container implements ContainerInterface
     {
         if (! in_array($service, $this->container->keys(), true)) {
             /* translators: %$s is replaced with requested service name. */
-            throw new InvalidArgumentException(sprintf(__('Invalid Service %s Passed to the container', 'login-with-google'), $service));
+            throw new InvalidArgumentException(esc_html(sprintf(__('Invalid Service %s Passed to the container', 'login-with-google'), $service)));
         }
 
         return $this->container[ $service ];

@@ -59,7 +59,7 @@ class Authenticator
     public function authenticate(stdClass $user): WP_User
     {
         if (! property_exists($user, 'email')) {
-            throw new InvalidArgumentException(__('Email needs to be present for the user.', 'login-with-google'));
+            throw new InvalidArgumentException(esc_html(__('Email needs to be present for the user.', 'login-with-google')));
         }
 
         if (email_exists($user->email)) {
@@ -101,7 +101,7 @@ class Authenticator
         $register = true === (bool) $this->settings->registration_enabled || (bool) get_option('users_can_register', false);
 
         if (! $register) {
-            throw new Exception(__('Registration is not allowed.', 'login-with-google'));
+            throw new Exception(esc_html(__('Registration is not allowed.', 'login-with-google')));
         }
 
         try {
@@ -126,7 +126,7 @@ class Authenticator
             }
 
             /* translators: %s is replaced with email ID of user trying to register */
-            throw new Exception(sprintf(__('Cannot register with this email: %s', 'login-with-google'), $user->email));
+            throw new Exception(esc_html(sprintf(__('Cannot register with this email: %s', 'login-with-google'), $user->email)));
         } catch (Throwable $e) {
             throw $e;
         }
