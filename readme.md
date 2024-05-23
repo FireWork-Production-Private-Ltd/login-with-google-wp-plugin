@@ -1,0 +1,1 @@
+`composer phpcbf` to fix `PSR12` standards code formating
