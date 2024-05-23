@@ -64,7 +64,7 @@ class Container implements ContainerInterface
      */
     public function get(string $service)
     {
-        if (! in_array($service, $this->container->keys())) {
+        if (! in_array($service, $this->container->keys(), true)) {
             /* translators: %$s is replaced with requested service name. */
             throw new InvalidArgumentException(sprintf(__('Invalid Service %s Passed to the container', 'login-with-google'), $service));
         }
@@ -91,7 +91,7 @@ class Container implements ContainerInterface
          *
          * @return Settings
          */
-        $this->container['settings'] = function (PimpleContainer $c) {
+        $this->container['settings'] = function () {
             return new Settings();
         };
 
@@ -132,7 +132,7 @@ class Container implements ContainerInterface
          *
          * @return Assets
          */
-        $this->container['assets'] = function (PimpleContainer $c) {
+        $this->container['assets'] = function () {
             return new Assets();
         };
 

@@ -48,7 +48,7 @@
             "@cs",
             "@tests"
         ],
-        "phpcs": "phpcs --standard=PSR12",
-        "phpcbf": "phpcbf --standard=PSR12"
+        "phpcs": "phpcs --standard=WordPressVIPMinimum",
+        "phpcbf": "phpcbf --standard=WordPressVIPMinimum"
     }
 }

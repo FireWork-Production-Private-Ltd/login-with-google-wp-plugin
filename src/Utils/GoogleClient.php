@@ -100,6 +100,7 @@ class GoogleClient
 
         if (in_array($name, $methods, true) && empty($this->access_token)) {
             throw new Exception(__('Access token must be set to make this API call', 'login-with-google'));
+            throw new Exception($args);
         }
     }
 
@@ -252,6 +253,7 @@ class GoogleClient
      */
     public function state(): string
     {
+        $state_data = null;
         $state_data['nonce']    = wp_create_nonce('login_with_google');
         $state_data             = apply_filters('FireWorkrkrk.google_login_state', $state_data);
         $state_data['provider'] = 'google';
